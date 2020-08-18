@@ -194,7 +194,7 @@ def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOu
         if followOutputs:
             sockets.extend(node.outputs)
             for socket in sockets:
-                linkedSockets = [] #getDirectlyLinkedSockets(socket)
+                linkedSockets = getDirectlyLinkedSockets(socket)
                 if len(linkedSockets) > 1 or isMultiLinkedSockets(sockets):
                     for linkedSocket in linkedSockets:
                         node = linkedSocket.node
@@ -208,8 +208,7 @@ def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOu
 def getLinkedNodes(sockets):
     nodesLinked = []
     for socket in sockets:
-        linkedSockets = [] #getDirectlyLinkedSockets(socket)
-        for linkedSocket in linkedSockets:
+        for linkedSocket in getDirectlyLinkedSockets(socket):
             node = linkedSocket.node
             if node not in nodesLinked: nodesLinked.append(node)
     return nodesLinked
@@ -217,7 +216,10 @@ def getLinkedNodes(sockets):
 def isMultiLinkedSockets(sockets):
     count = 0
     for socket in sockets:
-       links = [] # getDirectlyLinkedSockets(socket)
-       if len(links): count += 1
+       if len(getDirectlyLinkedSockets(socket)): count += 1
        if count > 1: return True
     return False
+
+def getDirectlyLinkedSockets(socket):
+    links = socket.links
+    return [link.to_socket for link in links]
