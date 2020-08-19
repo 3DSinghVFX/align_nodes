@@ -13,6 +13,7 @@ class NodeOperator:
 class AlignDependentNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.align_dependent_nodes"
     bl_label = "Align Dependent Nodes"
+    bl_description = "Aligns all dependent nodes w.r.t active node to its right side"
 
     def execute(self, context):
         offset = getAlignPieMenuSettings().offset
@@ -38,6 +39,7 @@ def alignDependent(offset, nodes):
 class AlignDependenciesNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.align_dependencies"
     bl_label = "Align Dependencies"
+    bl_description = "Aligns all dependencies nodes w.r.t active node to its left side"
 
     def execute(self, context):
         offset = getAlignPieMenuSettings().offset
@@ -60,63 +62,10 @@ def alignDependencies(offset, nodes):
                     node.location = location + Vector((- node.width - offset, 0))
             lastNode = node
 
-class AlignTopSelectionNodes(bpy.types.Operator, NodeOperator):
-    bl_idname = "node.align_top_selection_nodes"
-    bl_label = "Align Top Selection Nodes"
-
-    def execute(self, context):
-        activeNode = context.active_node
-        previousNode = activeNode
-
-        for node in context.selected_nodes:
-            if node != activeNode:
-                node.location.y = previousNode.location.y
-                previousNode = node
-        return {"FINISHED"}
-
-class AlignLeftSideSelectionNodes(bpy.types.Operator, NodeOperator):
-    bl_idname = "node.align_left_side_selection_nodes"
-    bl_label = "Align Left Side Selection Nodes"
-
-    def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
-        activeNode = context.active_node
-        previousNode = activeNode
-
-        for node in context.selected_nodes:
-            if node != activeNode:
-                node.location.x = getNodeLeftOffset(previousNode, node, offset)
-                previousNode = node
-        return {"FINISHED"}
-
-def getNodeLeftOffset(previousNode, node, offset):
-    if node.type == "REROUTE":
-        return previousNode.location.x - offset
-    return previousNode.location.x - (node.width + offset)
-
-class AlignRightSideSelectionNodes(bpy.types.Operator, NodeOperator):
-    bl_idname = "node.align_right_side_selection_nodes"
-    bl_label = "Align Right Side Selection Nodes"
-
-    def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
-        activeNode = context.active_node
-        previousNode = activeNode
-
-        for node in context.selected_nodes:
-            if node != activeNode:
-                node.location.x = getNodeRightOffset(previousNode, offset)
-                previousNode = node
-        return {"FINISHED"}
-
-def getNodeRightOffset(previousNode, offset):
-    if previousNode.type == "REROUTE":
-        return previousNode.location.x + offset
-    return previousNode.location.x + previousNode.width + offset
-
 class StakeUpSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.stake_up_selection_nodes"
     bl_label = "Stake Up Selection Nodes"
+    bl_description = "Stacks up all selected nodes w.r.t active node"
 
     def execute(self, context):
         offset = getAlignPieMenuSettings().offset
@@ -140,6 +89,7 @@ def getNodeStakeUpLocation(previousNode, node, offset):
 class StakeDownSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.stake_down_selection_nodes"
     bl_label = "Stake Down Selection Nodes"
+    bl_description = "Stacks down all selected nodes w.r.t active node"
 
     def execute(self, context):
         offset = getAlignPieMenuSettings().offset
@@ -159,6 +109,63 @@ def getNodeStakeDownLocation(previousNode, offset):
         return location
     location.y -= previousNode.dimensions.y + offset
     return location
+
+class AlignTopSelectionNodes(bpy.types.Operator, NodeOperator):
+    bl_idname = "node.align_top_selection_nodes"
+    bl_label = "Align Top Selection Nodes"
+    bl_description = "Aligns only the header of all selected nodes w.r.t active node"
+
+    def execute(self, context):
+        activeNode = context.active_node
+        previousNode = activeNode
+
+        for node in context.selected_nodes:
+            if node != activeNode:
+                node.location.y = previousNode.location.y
+                previousNode = node
+        return {"FINISHED"}
+
+class AlignRightSideSelectionNodes(bpy.types.Operator, NodeOperator):
+    bl_idname = "node.align_right_side_selection_nodes"
+    bl_label = "Align Right Side Selection Nodes"
+    bl_description = "Aligns only the side of all selected nodes w.r.t active node to its right side"
+
+    def execute(self, context):
+        offset = getAlignPieMenuSettings().offset
+        activeNode = context.active_node
+        previousNode = activeNode
+
+        for node in context.selected_nodes:
+            if node != activeNode:
+                node.location.x = getNodeRightOffset(previousNode, offset)
+                previousNode = node
+        return {"FINISHED"}
+
+def getNodeRightOffset(previousNode, offset):
+    if previousNode.type == "REROUTE":
+        return previousNode.location.x + offset
+    return previousNode.location.x + previousNode.width + offset
+
+class AlignLeftSideSelectionNodes(bpy.types.Operator, NodeOperator):
+    bl_idname = "node.align_left_side_selection_nodes"
+    bl_label = "Align Left Side Selection Nodes"
+    bl_description = "Aligns only the side of all selected nodes w.r.t active node to its left side"
+
+    def execute(self, context):
+        offset = getAlignPieMenuSettings().offset
+        activeNode = context.active_node
+        previousNode = activeNode
+
+        for node in context.selected_nodes:
+            if node != activeNode:
+                node.location.x = getNodeLeftOffset(previousNode, node, offset)
+                previousNode = node
+        return {"FINISHED"}
+
+def getNodeLeftOffset(previousNode, node, offset):
+    if node.type == "REROUTE":
+        return previousNode.location.x - offset
+    return previousNode.location.x - (node.width + offset)
 
 def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOutputs = False):
     nodes = []
