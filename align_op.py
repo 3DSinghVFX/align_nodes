@@ -21,26 +21,19 @@ class AlignDependentNodes(bpy.types.Operator, NodeOperator):
         return {"FINISHED"}
 
 def alignDependent(offset, nodes):
-        activeNode = nodes[0]
-        activeLocation = activeNode.location
-        xOffset = activeNode.width / 2
-        yOffset = activeNode.height / 2
-        lastNode = activeNode
-        for node in nodes[1:]:
-            if type(node) == list:
-                alignDependent(offset, node)
-            else:
-                widthOffset = node.width / 2
-                xOffset += widthOffset + offset
-                if node.type != 'REROUTE':
-                    if lastNode.type == 'REROUTE':
-                        activeLocation = node.location
-                        xOffset = node.width / 2
-                        yOffset = node.height / 2
-                    else:
-                        node.location = activeLocation + Vector((xOffset, yOffset - node.height / 2))
-                        xOffset += widthOffset
-                lastNode = node
+    activeNode = nodes[0]
+    lastNode = activeNode
+    for node in nodes[1:]:
+        if type(node) == list:
+            alignDependent(offset, node)
+        else:
+            if node.type != 'REROUTE':
+                if lastNode.type == 'REROUTE':
+                    location = node.location.copy()
+                else:
+                    location = lastNode.location.copy()
+                    node.location = location + Vector((lastNode.width + offset, 0))
+            lastNode = node
 
 class AlignDependenciesNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.align_dependencies"
@@ -53,26 +46,19 @@ class AlignDependenciesNodes(bpy.types.Operator, NodeOperator):
         return {"FINISHED"}
 
 def alignDependencies(offset, nodes):
-        activeNode = nodes[0]
-        activeLocation = activeNode.location
-        xOffset = activeNode.width / 2
-        yOffset = activeNode.height / 2
-        lastNode = activeNode
-        for node in nodes[1:]:
-            if type(node) == list:
-                alignDependencies(offset, node)
-            else:
-                widthOffset = node.width / 2
-                xOffset += widthOffset + offset
-                if node.type != 'REROUTE':
-                    if lastNode.type == 'REROUTE':
-                        activeLocation = node.location
-                        xOffset = node.width / 2
-                        yOffset = node.height / 2
-                    else:
-                        node.location = activeLocation + Vector((- xOffset, yOffset - node.height / 2))
-                        xOffset += widthOffset
-                lastNode = node
+    activeNode = nodes[0]
+    lastNode = activeNode
+    for node in nodes[1:]:
+        if type(node) == list:
+            alignDependencies(offset, node)
+        else:
+            if node.type != 'REROUTE':
+                if lastNode.type == 'REROUTE':
+                    location = node.location.copy()
+                else:
+                    location = lastNode.location.copy()
+                    node.location = location + Vector((- node.width - offset, 0))
+            lastNode = node
 
 class AlignTopSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_idname = "node.align_top_selection_nodes"
@@ -193,9 +179,10 @@ def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOu
 
         if followOutputs:
             sockets.extend(node.outputs)
+            isMultiLinked = isMultiLinkedSockets(sockets)
             for socket in sockets:
-                linkedSockets = getDirectlyLinkedSockets(socket)
-                if len(linkedSockets) > 1 or isMultiLinkedSockets(sockets):
+                linkedSockets = getDirectlyLinkedSocketsToOutput(socket)
+                if len(linkedSockets) > 1 or isMultiLinked:
                     for linkedSocket in linkedSockets:
                         node = linkedSocket.node
                         nodes.append(getNodesWhenFollowingBranchedLinks(node, followInputs, followOutputs))
@@ -208,7 +195,7 @@ def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOu
 def getLinkedNodes(sockets):
     nodesLinked = []
     for socket in sockets:
-        for linkedSocket in getDirectlyLinkedSockets(socket):
+        for linkedSocket in getDirectlyLinkedSocketsToInput(socket):
             node = linkedSocket.node
             if node not in nodesLinked: nodesLinked.append(node)
     return nodesLinked
@@ -216,10 +203,14 @@ def getLinkedNodes(sockets):
 def isMultiLinkedSockets(sockets):
     count = 0
     for socket in sockets:
-       if len(getDirectlyLinkedSockets(socket)): count += 1
+       if len(getDirectlyLinkedSocketsToOutput(socket)): count += 1
        if count > 1: return True
     return False
 
-def getDirectlyLinkedSockets(socket):
+def getDirectlyLinkedSocketsToInput(socket):
+    links = socket.links
+    return [link.from_socket for link in links]
+
+def getDirectlyLinkedSocketsToOutput(socket):
     links = socket.links
     return [link.to_socket for link in links]
