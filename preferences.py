@@ -8,9 +8,13 @@ addonName = os.path.basename(os.path.dirname(__file__))
 class AlignPieMenuProperties(bpy.types.PropertyGroup):
     bl_idname = "apn_PieMenuProperties"
 
-    offset: FloatProperty(name = "Offset for Align Pie Menu",
-        description = "Offset between nodes for Align Pi Menu",
+    offsetHorizontal: FloatProperty(name = "Horizontal Offset",
+        description = "Horizontal separation distance between nodes",
         default = 30, soft_min = 0.0, soft_max = 100.0)
+
+    offsetVertical: FloatProperty(name = "Vertical Offset",
+        description = "Vertical separation distance between nodes",
+        default = 15, soft_min = 0.0, soft_max = 100.0)
 
 class AlignNodesPreferences(bpy.types.AddonPreferences):
     bl_idname = addonName
@@ -20,10 +24,10 @@ class AlignNodesPreferences(bpy.types.AddonPreferences):
     def draw(self, context):
         layout = self.layout
 
-        row = layout.row()
+        row = layout.row(align = True)
 
-        col = row.column(align = True)
-        col.prop(self.alignPieMenuProp, "offset")
+        row.prop(self.alignPieMenuProp, "offsetHorizontal")
+        row.prop(self.alignPieMenuProp, "offsetVertical")
 
 def getPreferences():
     return bpy.context.preferences.addons[addonName].preferences

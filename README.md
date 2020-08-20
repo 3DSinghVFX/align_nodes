@@ -19,4 +19,4 @@ This tool allows to align the nodes in any node-editor *e.g., Shader Node-Editor
   - *Selection (Top Left)* - Aligns only the header of all selected nodes w.r.t active node.
   - *Selection (Bottom Right)* - Aligns only the side of all selected nodes w.r.t active node to its right side.
   - *Selection (Bottom Left)* - Aligns only the side of all selected nodes w.r.t active node to its left side.
-- You can change the default *Offset* (distance between nodes) from the preferences of the add-on.
+- You can change the default *Horizontal Offset* (side distance between nodes) and *Vertical Offset* (height distance between nodes) from the preferences of the add-on.

@@ -16,7 +16,7 @@ class AlignDependentNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Aligns all dependent nodes w.r.t active node to its right side"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
         alignDependent(offset, getNodesWhenFollowingBranchedLinks(activeNode, followOutputs = True))
         return {"FINISHED"}
@@ -42,7 +42,7 @@ class AlignDependenciesNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Aligns all dependencies nodes w.r.t active node to its left side"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
         alignDependencies(offset, getNodesWhenFollowingBranchedLinks(activeNode, followInputs = True))
         return {"FINISHED"}
@@ -68,7 +68,7 @@ class StakeUpSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Stacks up all selected nodes w.r.t active node"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetVertical
         activeNode = context.active_node
         previousNode = activeNode
 
@@ -92,7 +92,7 @@ class StakeDownSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Stacks down all selected nodes w.r.t active node"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetVertical
         activeNode = context.active_node
         previousNode = activeNode
 
@@ -131,7 +131,7 @@ class AlignRightSideSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Aligns only the side of all selected nodes w.r.t active node to its right side"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
         previousNode = activeNode
 
@@ -152,7 +152,7 @@ class AlignLeftSideSelectionNodes(bpy.types.Operator, NodeOperator):
     bl_description = "Aligns only the side of all selected nodes w.r.t active node to its left side"
 
     def execute(self, context):
-        offset = getAlignPieMenuSettings().offset
+        offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
         previousNode = activeNode
 
