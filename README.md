@@ -1,5 +1,5 @@
 # Align Nodes
-![](./Align_Pie.png?raw=true "Align Pie menu")
+![](./align_pie_img.png?raw=true "Align Pie menu")
 
 This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Editor, Compositing Nodes Editor, Animation Nodes Editor, Sverchok Nodes Editor*.
 
