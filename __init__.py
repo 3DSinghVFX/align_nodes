@@ -14,7 +14,7 @@
 bl_info = {
     "name" : "Align Nodes",
     "author" : "Kuldeep Singh",
-    "description" : "This tool allows to align the nodes in node-editor.",
+    "description" : "This tool allows to align the nodes in any nodes editor.",
     "blender" : (2, 83, 0),
     "version" : (0, 0, 1),
     "location": "Nodes Editor",

@@ -1,7 +1,7 @@
 # Align Nodes
 ![](./Align_Pie.png?raw=true "Align Pie menu")
 
-This tool allows to align the nodes in any node-editor *e.g., Shader Node-Editor, Compositing Node-Editor, Animation Nodes-Editor, Sverchok Nodes-Editor*.
+This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Editor, Compositing Nodes Editor, Animation Nodes Editor, Sverchok Nodes Editor*.
 
 **Installation:**
 - Download the zip file [Align Nodes](https://github.com/3DSinghVFX/align_nodes/archive/master.zip) add-on.
