@@ -70,15 +70,17 @@ class StakeUpSelectionNodes(bpy.types.Operator, NodeOperator):
     def execute(self, context):
         offset = getAlignPieMenuSettings().offsetVertical
         activeNode = context.active_node
-        previousNode = activeNode
+        selectedNodes = context.selected_nodes
+        if activeNode not in selectedNodes: return {"FINISHED"}
 
-        for node in context.selected_nodes:
+        previousNode = activeNode
+        for node in selectedNodes:
             if node != activeNode:
-                node.location = getNodeStakeUpLocation(previousNode, node, offset)
+                node.location = getStakeUpNodeLocation(previousNode, node, offset)
                 previousNode = node
         return {"FINISHED"}
 
-def getNodeStakeUpLocation(previousNode, node, offset):
+def getStakeUpNodeLocation(previousNode, node, offset):
     location = previousNode.location.copy()
     if node.type == "REROUTE":
         location.y += offset
@@ -94,15 +96,17 @@ class StakeDownSelectionNodes(bpy.types.Operator, NodeOperator):
     def execute(self, context):
         offset = getAlignPieMenuSettings().offsetVertical
         activeNode = context.active_node
-        previousNode = activeNode
+        selectedNodes = context.selected_nodes
+        if activeNode not in selectedNodes: return {"FINISHED"}
 
-        for node in context.selected_nodes:
+        previousNode = activeNode
+        for node in selectedNodes:
             if node != activeNode:
-                node.location = getNodeStakeDownLocation(previousNode, offset)
+                node.location = getStakeDownNodeLocation(previousNode, offset)
                 previousNode = node
         return {"FINISHED"}
 
-def getNodeStakeDownLocation(previousNode, offset):
+def getStakeDownNodeLocation(previousNode, offset):
     location = previousNode.location.copy()
     if previousNode.type == "REROUTE":
         location.y -= offset
@@ -117,9 +121,11 @@ class AlignTopSelectionNodes(bpy.types.Operator, NodeOperator):
 
     def execute(self, context):
         activeNode = context.active_node
-        previousNode = activeNode
+        selectedNodes = context.selected_nodes
+        if activeNode not in selectedNodes: return {"FINISHED"}
 
-        for node in context.selected_nodes:
+        previousNode = activeNode
+        for node in selectedNodes:
             if node != activeNode:
                 node.location.y = previousNode.location.y
                 previousNode = node
@@ -133,15 +139,17 @@ class AlignRightSideSelectionNodes(bpy.types.Operator, NodeOperator):
     def execute(self, context):
         offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
-        previousNode = activeNode
+        selectedNodes = context.selected_nodes
+        if activeNode not in selectedNodes: return {"FINISHED"}
 
-        for node in context.selected_nodes:
+        previousNode = activeNode
+        for node in selectedNodes:
             if node != activeNode:
-                node.location.x = getNodeRightOffset(previousNode, offset)
+                node.location.x = getRightOffsetForNode(previousNode, offset)
                 previousNode = node
         return {"FINISHED"}
 
-def getNodeRightOffset(previousNode, offset):
+def getRightOffsetForNode(previousNode, offset):
     if previousNode.type == "REROUTE":
         return previousNode.location.x + offset
     return previousNode.location.x + previousNode.width + offset
@@ -154,15 +162,17 @@ class AlignLeftSideSelectionNodes(bpy.types.Operator, NodeOperator):
     def execute(self, context):
         offset = getAlignPieMenuSettings().offsetHorizontal
         activeNode = context.active_node
-        previousNode = activeNode
+        selectedNodes = context.selected_nodes
+        if activeNode not in selectedNodes: return {"FINISHED"}
 
-        for node in context.selected_nodes:
+        previousNode = activeNode
+        for node in selectedNodes:
             if node != activeNode:
-                node.location.x = getNodeLeftOffset(previousNode, node, offset)
+                node.location.x = getLeftOffsetForNode(previousNode, node, offset)
                 previousNode = node
         return {"FINISHED"}
 
-def getNodeLeftOffset(previousNode, node, offset):
+def getLeftOffsetForNode(previousNode, node, offset):
     if node.type == "REROUTE":
         return previousNode.location.x - offset
     return previousNode.location.x - (node.width + offset)

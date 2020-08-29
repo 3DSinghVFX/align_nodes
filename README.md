@@ -9,7 +9,7 @@ This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Edit
 - Press the `Install` button, locate the zip file of *Align Nodes* add-on, install it.
 
 **How to Use:**
-- Press the shortcut key `Shift + S` in any node-editor, an *Align Pie* menu will pop up.
+- Press the shortcut key `Shift + E` in any node-editor, an *Align Pie* menu will pop up.
 - The *Align Pie* menu has eight nodes alignment operations:
   - *Dependent (Right)* - Aligns all dependent nodes w.r.t active node to its right side.
   - *Dependencies (Left)* - Aligns all dependencies nodes w.r.t active node to its left side.
