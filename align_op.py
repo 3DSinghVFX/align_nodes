@@ -186,30 +186,19 @@ def getNodesWhenFollowingBranchedLinks(startNode, followInputs = False, followOu
         sockets = []
         if followInputs:
             sockets.extend(node.inputs)
-            nodesLinked = getLinkedNodes(sockets)
-            if len(nodesLinked) > 1:
-                for node in nodesLinked:
-                    nodes.append(getNodesWhenFollowingBranchedLinks(node, followInputs, followOutputs))
-            else:
-                for node in nodesLinked:
-                    if node not in nodes: nodesToCheck.add(node)
-
+            nodesLinked = getLinkedDependenciesNodes(sockets)
         if followOutputs:
             sockets.extend(node.outputs)
-            isMultiLinked = isMultiLinkedSockets(sockets)
-            for socket in sockets:
-                linkedSockets = getDirectlyLinkedSocketsToOutput(socket)
-                if len(linkedSockets) > 1 or isMultiLinked:
-                    for linkedSocket in linkedSockets:
-                        node = linkedSocket.node
-                        nodes.append(getNodesWhenFollowingBranchedLinks(node, followInputs, followOutputs))
-                else:
-                    for linkedSocket in linkedSockets:
-                        node = linkedSocket.node
-                        if node not in nodes: nodesToCheck.add(node)
+            nodesLinked = getLinkedDependentNodes(sockets)
+        if len(nodesLinked) > 1:
+            for node in nodesLinked:
+                nodes.append(getNodesWhenFollowingBranchedLinks(node, followInputs, followOutputs))
+        else:
+            for node in nodesLinked:
+                if node not in nodes: nodesToCheck.add(node)
     return nodes
 
-def getLinkedNodes(sockets):
+def getLinkedDependenciesNodes(sockets):
     nodesLinked = []
     for socket in sockets:
         for linkedSocket in getDirectlyLinkedSocketsToInput(socket):
@@ -217,12 +206,13 @@ def getLinkedNodes(sockets):
             if node not in nodesLinked: nodesLinked.append(node)
     return nodesLinked
 
-def isMultiLinkedSockets(sockets):
-    count = 0
+def getLinkedDependentNodes(sockets):
+    nodesLinked = []
     for socket in sockets:
-       if len(getDirectlyLinkedSocketsToOutput(socket)): count += 1
-       if count > 1: return True
-    return False
+        for linkedSocket in getDirectlyLinkedSocketsToOutput(socket):
+            node = linkedSocket.node
+            if node not in nodesLinked: nodesLinked.append(node)
+    return nodesLinked
 
 def getDirectlyLinkedSocketsToInput(socket):
     links = socket.links
