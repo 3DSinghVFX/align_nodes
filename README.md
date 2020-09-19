@@ -1,7 +1,7 @@
 # Align Nodes
 ![](./align_pie_img.png?raw=true "Align Pie menu") ![](./snap_pie_img.png?raw=true "Snap Pie menu")
 
-This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Editor, Compositing Nodes Editor, Animation Nodes Editor, Sverchok Nodes Editor*.
+This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Editor, Compositing Nodes Editor, Simulation Editor, Animation Nodes Editor, Sverchok Nodes Editor*.
 
 **Installation:**
 - Download the zip file [Align Nodes](https://github.com/3DSinghVFX/align_nodes/archive/master.zip) add-on.
@@ -22,7 +22,7 @@ This tool allows to align the nodes in any nodes editor *e.g., Shader Nodes Edit
 - You can change the default *Horizontal Offset* (side distance between nodes) and *Vertical Offset* (height distance between nodes) from the preferences of the add-on.
 
 **How to Use Snap Pie:**
-- Press the shortcut key `Shift + S` in any node-editor, an *Snap Pie* menu will pop up.
+- Press the shortcut key `Shift + W` in any node-editor, an *Snap Pie* menu will pop up.
 - The *Snap Pie* menu has six nodes snaps operations:
   - *Snap Bottom (Top Left)* - Snaps the bottom of all selected nodes w.r.t active node.
   - *Snap Height (Top)* - Snaps the height center of all selected nodes w.r.t active node.

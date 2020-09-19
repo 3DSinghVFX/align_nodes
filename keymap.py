@@ -13,7 +13,7 @@ def register():
     kmi.properties.name = "APN_MT_align_pie"
 
     # Snap Pie Menu
-    kmi = km.keymap_items.new("wm.call_menu_pie", type = "S", value = "PRESS", shift = True)
+    kmi = km.keymap_items.new("wm.call_menu_pie", type = "W", value = "PRESS", shift = True)
     kmi.properties.name = "SPN_MT_snap_pie"
 
     addon_keymaps.append(km)
