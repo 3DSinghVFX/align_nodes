@@ -7,13 +7,13 @@ class AlignPieMenu(bpy.types.Menu):
     def draw(self, context):
         pie = self.layout.menu_pie()
 
-        pie.operator("node.align_dependencies", text = "Dependencies", icon = "ANCHOR_RIGHT")
+        pie.operator("node.align_dependencies", text = "Dependencies", icon = "REW")
 
-        pie.operator("node.align_dependent_nodes", text = "Dependent", icon = "ANCHOR_LEFT")
+        pie.operator("node.align_dependent_nodes", text = "Dependent", icon = "FF")
 
-        pie.operator("node.stake_down_selection_nodes", text = "Selection", icon = "ANCHOR_TOP")
+        pie.operator("node.stake_down_selection_nodes", text = "Selection", icon = "FILE_TEXT")
 
-        pie.operator("node.stake_up_selection_nodes", text = "Selection", icon = "ANCHOR_BOTTOM")
+        pie.operator("node.stake_up_selection_nodes", text = "Selection", icon = "FILE_TEXT")
 
         pie.operator("node.align_top_selection_nodes", text = "Selection", icon = "TRIA_UP_BAR")
 
