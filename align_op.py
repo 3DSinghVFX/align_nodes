@@ -30,7 +30,14 @@ def alignDependent(offset, nodes):
         else:
             if node.type != 'REROUTE':
                 if lastNode.type == 'REROUTE':
-                    location = node.location.copy()
+                    pass
+                elif lastNode.parent is None and node.parent is not None:
+                    pass
+                elif lastNode.parent is not None and node.parent is None:
+                    node.location.x = lastNode.location.x + lastNode.width + 2 * offset
+                    pass
+                elif abs(lastNode.location.x - node.location.x) <= 0.01:
+                    pass
                 else:
                     location = lastNode.location.copy()
                     node.location = location + Vector((lastNode.width + offset, 0))
@@ -56,7 +63,14 @@ def alignDependencies(offset, nodes):
         else:
             if node.type != 'REROUTE':
                 if lastNode.type == 'REROUTE':
-                    location = node.location.copy()
+                    pass
+                elif lastNode.parent is None and node.parent is not None:
+                    pass
+                elif lastNode.parent is not None and node.parent is None:
+                    node.location.x = lastNode.location.x - node.width - 2 * offset
+                    pass
+                elif abs(lastNode.location.x - node.location.x) <= 0.01:
+                    pass
                 else:
                     location = lastNode.location.copy()
                     node.location = location + Vector((- node.width - offset, 0))
